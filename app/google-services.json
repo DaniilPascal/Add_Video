@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422836379278",
+    "project_id": "add-video-cd2fb",
+    "storage_bucket": "add-video-cd2fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422836379278:android:d277d268a19e5668ee33df",
+        "android_client_info": {
+          "package_name": "com.example.pdf.add_video"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSNfjQQvXIpeuH7eXyT5M48IgD62iVtB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
