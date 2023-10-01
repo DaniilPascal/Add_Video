@@ -70,12 +70,12 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.HolderVideo>
         holder.deleteFab.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Delete").setMessage("Are you sure you want to delete video: "+ title).setPositiveButton("DELETE", (dialogInterface, i) ->
-                    deleteVideo(modelVideo)).setPositiveButton("CANCEL", (dialogInterface, i) -> dialogInterface.dismiss()).show();
+                    deleteVideo(modelVideo)).setNegativeButton("CANCEL", (dialogInterface, i) -> dialogInterface.dismiss()).show();
         });
     }
 
     private void setVideoUrl(ModelVideo modelVideo, HolderVideo holder) {
-        holder.progressBar.setVisibility(View.VISIBLE);
+//        holder.progressBar.setVisibility(View.VISIBLE);
 
         String videoUrl = modelVideo.getVideoUrl();
         MediaController mediaController = new MediaController(context);
@@ -90,15 +90,15 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.HolderVideo>
         holder.videoView.setOnInfoListener((mediaPlayer, what, extra) -> {
             switch (what){
                 case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:{
-                    holder.progressBar.setVisibility(View.VISIBLE);
+//                    holder.progressBar.setVisibility(View.VISIBLE);
                     return true;
                 }
                 case MediaPlayer.MEDIA_INFO_BUFFERING_START:{
-                    holder.progressBar.setVisibility(View.VISIBLE);
+//                    holder.progressBar.setVisibility(View.VISIBLE);
                     return true;
                 }
                 case MediaPlayer.MEDIA_INFO_BUFFERING_END:{
-                    holder.progressBar.setVisibility(View.GONE);
+//                    holder.progressBar.setVisibility(View.GONE);
                     return true;
                 }
             }
@@ -148,7 +148,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.HolderVideo>
     static class HolderVideo extends RecyclerView.ViewHolder{
         VideoView videoView;
         TextView titleTv, timeTv;
-        ProgressBar progressBar;
+//        ProgressBar progressBar;
         FloatingActionButton deleteFab, downloadFab;
 
         public HolderVideo(@NonNull View itemView){
@@ -156,7 +156,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.HolderVideo>
 
             downloadFab = itemView.findViewById(R.id.downloadFab);
             deleteFab = itemView.findViewById(R.id.deleteFab);
-            progressBar = itemView.findViewById(R.id.progressBar);
+//            progressBar = itemView.findViewById(R.id.progressBar);
             videoView = itemView.findViewById(R.id.videoView);
             titleTv = itemView.findViewById(R.id.titleTv);
             timeTv = itemView.findViewById(R.id.timeTv);

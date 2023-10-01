@@ -87,43 +87,66 @@ public class AddVideoActivity extends AppCompatActivity {
         String filePathAndName = "Videos/" + "video_" + timestamp;
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(filePathAndName);
-        storageReference.putFile(videoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isSuccessful()) {
-                    Uri downloadUri = uriTask.getResult();
-                    if (uriTask.isSuccessful()) {
-                        HashMap<String, Object> hashMap = new HashMap<>();
+
+        UploadTask uploadTask = storageReference.putFile(videoUri);
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("id", timestamp);
                         hashMap.put("title", title);
                         hashMap.put("timestamp", "" + timestamp);
-                        hashMap.put("videoUrl", "" + downloadUri);
+                        hashMap.put("videoUrl", "" + uri);
 
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                        reference.child("Videos").child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                progressDialog.dismiss();
-                                Toast.makeText(AddVideoActivity.this, "Video Uploaded!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                                Toast.makeText(AddVideoActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Videos");
+                        reference.child(timestamp).setValue(hashMap).addOnSuccessListener(unused -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(AddVideoActivity.this, "Video Uploaded!", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(AddVideoActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
-                    }
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(AddVideoActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            });
+        }).addOnFailureListener(e -> {
+
         });
+//        storageReference.putFile(videoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                while (!uriTask.isSuccessful()) {
+//                    Uri downloadUri = uriTask.getResult();
+//                    if (uriTask.isSuccessful()) {
+//                        HashMap<String, Object> hashMap = new HashMap<>();
+//                        hashMap.put("id", timestamp);
+//                        hashMap.put("title", title);
+//                        hashMap.put("timestamp", "" + timestamp);
+//                        hashMap.put("videoUrl", "" + downloadUri);
+//
+//                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+//                        reference.child("Videos").child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void unused) {
+//                                progressDialog.dismiss();
+//                                Toast.makeText(AddVideoActivity.this, "Video Uploaded!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                progressDialog.dismiss();
+//                                Toast.makeText(AddVideoActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                progressDialog.dismiss();
+//                Toast.makeText(AddVideoActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     private void videoPickDialog() {
